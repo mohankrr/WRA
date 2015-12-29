@@ -34,13 +34,17 @@ namespace WRAWiFiLight
         public  MainPage()
         {
             this.InitializeComponent();
+            this.rgbSelector.Loaded += RgbSelector_Loaded;
+        }
 
+        private async void RgbSelector_Loaded(object sender, RoutedEventArgs e)
+        {
         }
 
         RemoteDevice arduino;
         NetworkSerial netWorkSerial;
         UwpFirmata firmata;
-        private void btnConnect_Click(object sender, RoutedEventArgs e)
+        private async void btnConnect_Click(object sender, RoutedEventArgs e)
         {
             ushort port = System.Convert.ToUInt16(this.txtPort.Text);
 
@@ -57,6 +61,9 @@ namespace WRAWiFiLight
             netWorkSerial.begin(115200, SerialConfig.SERIAL_8N1);
 
             this.txtStatus.Text = "Connecting..";
+
+
+
         }
 
         private void NetWorkSerial_ConnectionFailed(string message)
@@ -78,13 +85,14 @@ namespace WRAWiFiLight
 
             //Setup the WriteableBitmap object from which the color at the touched point will be retrieved.
             RenderTargetBitmap rgbGradientTarget = new RenderTargetBitmap();
-            await rgbGradientTarget.RenderAsync(rgbSelector);
+            
+            await rgbGradientTarget.RenderAsync(rgbSelector, rgbGradientTarget.PixelWidth, rgbGradientTarget.PixelHeight);
             IBuffer pixelBuffer = await rgbGradientTarget.GetPixelsAsync();
 
             var width = rgbGradientTarget.PixelWidth;
             var height = rgbGradientTarget.PixelHeight;
 
-            rgbGradient = await new WriteableBitmap(1, 1).FromPixelBuffer(pixelBuffer, width, height);
+            rgbGradient = await new WriteableBitmap(width, height).FromPixelBuffer(pixelBuffer, width, height);
 
         }
 
@@ -98,7 +106,10 @@ namespace WRAWiFiLight
         {
             var touchedPoint=e.GetCurrentPoint(this.rgbSelector);
 
-            Color color = rgbGradient.GetPixel((int)touchedPoint.Position.X, (int)touchedPoint.Position.Y);
+            var scaledX = ((int)touchedPoint.Position.X / this.rgbSelector.Width) * this.rgbGradient.PixelWidth;
+            var scaledY = ((int)touchedPoint.Position.Y / this.rgbSelector.Height) * this.rgbGradient.PixelHeight;
+
+            Color color = rgbGradient.GetPixel((int)scaledX, (int)scaledY);
 
             var colorData = string.Format("{0},{1},{2}", color.R, color.G, color.B);
 

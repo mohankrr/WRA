@@ -27,14 +27,14 @@
         <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"  x:Name="txtPort" Text="5055"></TextBox>
         <Button Grid.Row="2" Grid.Column="0" x:Name="btnConnect" Click="btnConnect_Click" Content="Connect" />
         <TextBlock x:Name="txtStatus" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" TextAlignment="Center"></TextBlock>
-        <Rectangle x:Name="rgbSelector" PointerPressed="rgbSelector_PointerPressed" 
+        <Rectangle x:Name="rgbSelector" Height="425" Width="360" PointerPressed="rgbSelector_PointerPressed" 
                                          Grid.Row="3" Grid.ColumnSpan="3"  >
             <Rectangle.Fill>
                 <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                     <GradientStop Color="Red" Offset="0.0" />
                     <GradientStop Color="Green" Offset="0.25" />
-                    <GradientStop Color="Blue" Offset="0.75" />
-                    <GradientStop Color="Red" Offset="1.0" />
+                    <GradientStop Color="Blue" Offset="0.50" />
+                    <GradientStop Color="Red" Offset="0.75" />
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
